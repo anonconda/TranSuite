@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="50f69b63-4ce5-4ced-8ee7-655e38d59ff5" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/transfeat_parser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="555">
+              <caret line="83" column="34" lean-forward="true" selection-start-line="83" selection-start-column="34" selection-end-line="83" selection-end-column="34" />
+              <folding>
+                <element signature="e#103#112#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/transfeat_main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="595">
+              <caret line="169" column="38" selection-start-line="169" selection-start-column="38" selection-end-line="169" selection-end-column="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/parsing/fasta_parsing_tools.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/get_bam_subset.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="655">
+              <caret line="127" selection-start-line="127" selection-end-line="127" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/findlorf/findlorf_tools.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="281">
+              <caret line="362" column="14" selection-start-line="362" selection-start-column="10" selection-end-line="362" selection-end-column="14" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/transfeat/identify_non_coding_features.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="659">
+              <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/transfeat/transfeat_tools.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="415">
+              <caret line="725" lean-forward="true" selection-start-line="725" selection-end-line="725" />
+              <folding>
+                <element signature="e#384#1358#0" />
+                <element signature="e#471#683#0" />
+                <element signature="e#488#635#0" />
+                <element signature="e#729#942#0" />
+                <element signature="e#746#894#0" />
+                <element signature="e#987#1191#0" />
+                <element signature="e#1004#1143#0" />
+                <element signature="e#1662#2825#0" />
+                <element signature="e#2100#2760#0" />
+                <element signature="e#2221#2364#0" />
+                <element signature="e#2392#2641#0" />
+                <element signature="e#2883#8513#0" />
+                <element signature="e#3029#5081#0" />
+                <element signature="e#3086#3130#0" />
+                <element signature="e#3417#3514#0" />
+                <element signature="e#3626#3883#0" />
+                <element signature="e#4041#4103#0" />
+                <element signature="e#4253#4538#0" />
+                <element signature="e#4307#4407#0" />
+                <element signature="e#5407#7584#0" />
+                <element signature="e#5458#5838#0" />
+                <element signature="e#5866#5967#0" />
+                <element signature="e#6175#6331#0" />
+                <element signature="e#6458#6705#0" />
+                <element signature="e#6783#7269#0" />
+                <element signature="e#6986#7056#0" />
+                <element signature="e#7098#7170#0" />
+                <element signature="e#7803#7881#0" />
+                <element signature="e#8069#8438#0" />
+                <element signature="e#8185#8438#0" />
+                <element signature="e#8580#11905#0" />
+                <element signature="e#8866#9459#0" />
+                <element signature="e#8999#9084#0" />
+                <element signature="e#9314#9404#0" />
+                <element signature="e#9465#9517#0" />
+                <element signature="e#9779#11869#0" />
+                <element signature="e#9935#10028#0" />
+                <element signature="e#10142#11869#0" />
+                <element signature="e#10386#11869#0" />
+                <element signature="e#10429#11089#0" />
+                <element signature="e#10541#11089#0" />
+                <element signature="e#10672#11089#0" />
+                <element signature="e#10734#10810#0" />
+                <element signature="e#11152#11801#0" />
+                <element signature="e#11152#11236#0" />
+                <element signature="e#11448#11801#0" />
+                <element signature="e#11579#11801#0" />
+                <element signature="e#11967#13170#0" />
+                <element signature="e#12227#13145#0" />
+                <element signature="e#12405#12782#0" />
+                <element signature="e#13231#15316#0" />
+                <element signature="e#13427#15264#0" />
+                <element signature="e#13836#13988#0" />
+                <element signature="e#14035#14288#0" />
+                <element signature="e#15388#15906#0" />
+                <element signature="e#15494#15874#0" />
+                <element signature="e#15577#15795#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>categories_dt</find>
+      <find>OVUORF</find>
+      <find>PTC_oNLY</find>
+      <find>NONCODING_UNCLASSIFIED</find>
+      <find>unclassi</find>
+      <find>TEST</find>
+      <find>table_subfolder</find>
+      <find>TransAll</find>
+      <find>del(</find>
+      <find>temp.</find>
+      <find>ldORF_nuc</find>
+      <find>is_longer_dorf_dt</find>
+      <find>filter_</find>
+      <find>Re-f</find>
+      <find>fix_chimeric_start_codon</find>
+      <find>Warning</find>
+      <find>seems to be</find>
+      <find>if __name</find>
+      <find>non_coding_genes</find>
+      <find>_numbers_</find>
+      <find>OLD</find>
+      <find>Non_coding</find>
+      <find>&quot;ldORF&quot;</find>
+      <find>filter</find>
+      <find>ldORF</find>
+      <find>features_info_dicts</find>
+      <find>ldorf_coord_dt</find>
+      <find>Uploading transcrip</find>
+      <find>pep_len_th</find>
+      <find>TODO</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
+    <dirStrings>
+      <dir>C:\Users\JC\Desktop\TranSuite_v_0_1_2\modules</dir>
+      <dir>C:\Users\JC\Desktop\TranSuite_v_0_1_2</dir>
+      <dir>C:\Users\JC\Desktop\TranSuite_v_0_2_0\modules</dir>
+      <dir>C:\Users\JC\Desktop\TranSuite_v_0_2_0</dir>
+    </dirStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/scripts/group_by_overlap_module.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/fixing_chimeric_genes_backup1.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_39.py" />
+        <option value="$PROJECT_DIR$/modules/transfix_main_backup3.py" />
+        <option value="$PROJECT_DIR$/scripts/get_transcripts_seq.py" />
+        <option value="$PROJECT_DIR$/scripts/generate_upset_plot.py" />
+        <option value="$PROJECT_DIR$/modules/transall_main.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/explore_new_coding_genes.py" />
+        <option value="$PROJECT_DIR$/lib/report/transfeat_report_backup1.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/get_transfeat_table_numbers.py" />
+        <option value="$PROJECT_DIR$/lib/transfeat/identify_coding_features.py" />
+        <option value="$PROJECT_DIR$/lib/parsing/gtf_parsing_tools.py" />
+        <option value="$PROJECT_DIR$/scripts/identify_antisense_to_coding_backup.py" />
+        <option value="$PROJECT_DIR$/scripts/identify_antisense_to_coding.py" />
+        <option value="$PROJECT_DIR$/lib/transfind/transfind_tools.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/transfix_tools.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/fixing_chimeric_genes.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_40.py" />
+        <option value="$PROJECT_DIR$/modules/transfind_main.py" />
+        <option value="$PROJECT_DIR$/lib/report/new_transfeat_report.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/chimeric_gene_correction.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_42.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_45.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_46.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_47.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_43.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_49.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_48.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_51.py" />
+        <option value="$PROJECT_DIR$/modules/all_parser.py" />
+        <option value="$PROJECT_DIR$/modules/transfeat_parser.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/load_annotation.py" />
+        <option value="$PROJECT_DIR$/modules/all_main.py" />
+        <option value="$PROJECT_DIR$/modules/transfix_main.py" />
+        <option value="$PROJECT_DIR$/modules/transfix_parser.py" />
+        <option value="$PROJECT_DIR$/modules/findlorf_parser.py" />
+        <option value="$PROJECT_DIR$/lib/parsing/gtf_object_tools.py" />
+        <option value="$PROJECT_DIR$/lib/transfix/gene_overlap_module.py" />
+        <option value="$PROJECT_DIR$/lib/report/transfeat_report.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/example_parsing_table_into_dataframe_JC_style.py" />
+        <option value="$PROJECT_DIR$/modules/auto_parser.py" />
+        <option value="$PROJECT_DIR$/transuite.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_41.py" />
+        <option value="$PROJECT_DIR$/lib/parsing/fasta_parsing_tools.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_50.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_55.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/get_bam_subset.py" />
+        <option value="$PROJECT_DIR$/lib/findlorf/findlorf_tools.py" />
+        <option value="$PROJECT_DIR$/lib/transfeat/identify_non_coding_features.py" />
+        <option value="$PROJECT_DIR$/modules/transfeat_main.py" />
+        <option value="$PROJECT_DIR$/lib/transfeat/transfeat_tools.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-11" />
+    <option name="y" value="-11" />
+    <option name="width" value="1943" />
+    <option name="height" value="1043" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="TranSuite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TranSuite" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TranSuite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TranSuite" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TranSuite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TranSuite" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="findlorf" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TranSuite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TranSuite" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="transfeat" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="TranSuite" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TranSuite" type="462c0819:PsiDirectoryNode" />
+              <item name="modules" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\lib\transfix" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\backup_files" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_0_10\lib" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_0_10" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_0_10\OLD" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\lib\report" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\modules" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\lib\transfix" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_1_2\scripts" />
+      <recent name="C:\Users\JC\Desktop\TranSuite_v_0_0_10\lib\parsing" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.get_bam_subset">
+    <configuration name="get_bam_subset" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/get_bam_subset.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="new_transfeat_report" type="PythonConfigurationType" factoryName="Python">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/lib/report" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="C:\Users\JC\Desktop\TranSuite_v_0_1_3\lib\report\transfeat_report.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch_41" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_41.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch_45" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_45.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch_50" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_50.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="scratch_55" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch_55.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="transfix_main" type="PythonConfigurationType" factoryName="Python">
+      <module name="TranSuite_v_0_1_0" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modules/transfix_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.get_bam_subset" />
+        <item itemvalue="Python.scratch_55" />
+        <item itemvalue="Python.scratch_50" />
+        <item itemvalue="Python.scratch_41" />
+        <item itemvalue="Python.scratch_45" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="50f69b63-4ce5-4ced-8ee7-655e38d59ff5" name="Default Changelist" comment="" />
+      <created>1582636924371</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1582636924371</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1130064" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3206934" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49959514" weight="0.24593717" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39869988" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50040483" side_tool="true" weight="0.25932506" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="right" id="R Packages" order="4" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2249467" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3206934" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49959514" weight="0.34777898" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39869988" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50040483" side_tool="true" weight="0.25932506" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="right" id="R Packages" order="4" />
+    </layout-to-restore>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/lib/transfix/chimeric_gene_correction.py" />
+    <entry file="file://$USER_HOME$/Anaconda3/envs/bio/Lib/statistics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="314" selection-start-line="314" selection-end-line="314" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_51.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/parsing/gtf_parsing_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="26" column="21" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/transfix/load_annotation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="264" column="46" lean-forward="true" selection-start-line="264" selection-start-column="46" selection-end-line="264" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/transfix/transfix_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1839">
+          <caret line="466" column="4" selection-start-line="466" selection-start-column="4" selection-end-line="466" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/transfix/gene_overlap_module.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="191" column="29" selection-start-line="191" selection-start-column="29" selection-end-line="191" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#89#125#0" />
+            <element signature="e#159#194#0" />
+            <element signature="e#237#272#0" />
+            <element signature="e#330#698#0" />
+            <element signature="e#436#642#0" />
+            <element signature="e#753#1010#0" />
+            <element signature="e#880#975#0" />
+            <element signature="e#1064#1377#0" />
+            <element signature="e#1422#1518#0" />
+            <element signature="e#1593#4298#0" />
+            <element signature="e#4404#6173#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/transfix_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="77" selection-start-line="77" selection-end-line="77" />
+          <folding>
+            <element signature="e#103#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/transfix_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="64" column="77" selection-start-line="64" selection-start-column="77" selection-end-line="64" selection-end-column="77" />
+          <folding>
+            <element signature="e#119#128#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/findlorf_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="89" selection-start-line="89" selection-end-line="89" />
+          <folding>
+            <element signature="e#103#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="171">
+            <caret line="186" selection-start-line="186" selection-end-line="186" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_52.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/example_parsing_table_into_dataframe_JC_style.py" />
+    <entry file="file://$PROJECT_DIR$/modules/auto_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="40" column="11" lean-forward="true" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="11" />
+          <folding>
+            <element signature="e#103#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Supplementary_material_XXX_TranSuite_paper_code/get_nonAUG_distribution.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/report/transfeat_report.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-285">
+          <caret line="426" column="4" selection-start-line="426" selection-start-column="4" selection-end-line="426" selection-end-column="4" />
+          <folding>
+            <element signature="e#229#325#0" />
+            <element signature="e#379#754#0" />
+            <element signature="e#633#738#0" />
+            <element signature="e#803#3168#0" />
+            <element signature="e#1108#2422#0" />
+            <element signature="e#1108#1117#0" />
+            <element signature="e#1367#2422#0" />
+            <element signature="e#2867#2972#0" />
+            <element signature="e#3594#4210#0" />
+            <element signature="e#3661#3732#0" />
+            <element signature="e#3784#4210#0" />
+            <element signature="e#3963#4050#0" />
+            <element signature="e#4125#4210#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/parsing/gtf_object_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="417" column="67" lean-forward="true" selection-start-line="417" selection-start-column="67" selection-end-line="417" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_35.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_36.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_37.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_38.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_39.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_54.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_53.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/transuite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="23" column="71" selection-start-line="23" selection-start-column="71" selection-end-line="23" selection-end-column="71" />
+          <folding>
+            <element signature="e#103#113#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/findlorf_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="755">
+          <caret line="122" lean-forward="true" selection-start-line="122" selection-end-line="122" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_41.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="835">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_42.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-820">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#0#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_43.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="620">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_44.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_45.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="16" column="35" lean-forward="true" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_46.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="580">
+          <caret line="29" column="37" lean-forward="true" selection-start-line="29" selection-start-column="37" selection-end-line="29" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_47.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="9" selection-start-column="9" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_48.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_49.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_40.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="18" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_50.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="515">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_55.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/auto_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="655">
+          <caret line="57" column="37" selection-start-line="57" selection-start-column="37" selection-end-line="57" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/RNAseq_preprocessing/generate_genome_index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/RNAseq_preprocessing/run_fastqc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/Analyze_NMD_transcripts/analyze_nmd_transcripts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1320">
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Rein_partial_backup_Nov18/PycharmProjects/lab_scripts/compare_gene_in__annotations.py" />
+    <entry file="file://D:/Rein_partial_backup_Nov18/PycharmProjects/lab_scripts/count_reads.py" />
+    <entry file="file://$PROJECT_DIR$/lib/parsing/fasta_parsing_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/get_bam_subset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="655">
+          <caret line="127" selection-start-line="127" selection-end-line="127" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/findlorf/findlorf_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="362" column="14" selection-start-line="362" selection-start-column="10" selection-end-line="362" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/transfeat/identify_non_coding_features.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="659">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/transfeat_parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="83" column="34" lean-forward="true" selection-start-line="83" selection-start-column="34" selection-end-line="83" selection-end-column="34" />
+          <folding>
+            <element signature="e#103#112#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/transfeat_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="169" column="38" selection-start-line="169" selection-start-column="38" selection-end-line="169" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/transfeat/transfeat_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="725" lean-forward="true" selection-start-line="725" selection-end-line="725" />
+          <folding>
+            <element signature="e#384#1358#0" />
+            <element signature="e#471#683#0" />
+            <element signature="e#488#635#0" />
+            <element signature="e#729#942#0" />
+            <element signature="e#746#894#0" />
+            <element signature="e#987#1191#0" />
+            <element signature="e#1004#1143#0" />
+            <element signature="e#1662#2825#0" />
+            <element signature="e#2100#2760#0" />
+            <element signature="e#2221#2364#0" />
+            <element signature="e#2392#2641#0" />
+            <element signature="e#2883#8513#0" />
+            <element signature="e#3029#5081#0" />
+            <element signature="e#3086#3130#0" />
+            <element signature="e#3417#3514#0" />
+            <element signature="e#3626#3883#0" />
+            <element signature="e#4041#4103#0" />
+            <element signature="e#4253#4538#0" />
+            <element signature="e#4307#4407#0" />
+            <element signature="e#5407#7584#0" />
+            <element signature="e#5458#5838#0" />
+            <element signature="e#5866#5967#0" />
+            <element signature="e#6175#6331#0" />
+            <element signature="e#6458#6705#0" />
+            <element signature="e#6783#7269#0" />
+            <element signature="e#6986#7056#0" />
+            <element signature="e#7098#7170#0" />
+            <element signature="e#7803#7881#0" />
+            <element signature="e#8069#8438#0" />
+            <element signature="e#8185#8438#0" />
+            <element signature="e#8580#11905#0" />
+            <element signature="e#8866#9459#0" />
+            <element signature="e#8999#9084#0" />
+            <element signature="e#9314#9404#0" />
+            <element signature="e#9465#9517#0" />
+            <element signature="e#9779#11869#0" />
+            <element signature="e#9935#10028#0" />
+            <element signature="e#10142#11869#0" />
+            <element signature="e#10386#11869#0" />
+            <element signature="e#10429#11089#0" />
+            <element signature="e#10541#11089#0" />
+            <element signature="e#10672#11089#0" />
+            <element signature="e#10734#10810#0" />
+            <element signature="e#11152#11801#0" />
+            <element signature="e#11152#11236#0" />
+            <element signature="e#11448#11801#0" />
+            <element signature="e#11579#11801#0" />
+            <element signature="e#11967#13170#0" />
+            <element signature="e#12227#13145#0" />
+            <element signature="e#12405#12782#0" />
+            <element signature="e#13231#15316#0" />
+            <element signature="e#13427#15264#0" />
+            <element signature="e#13836#13988#0" />
+            <element signature="e#14035#14288#0" />
+            <element signature="e#15388#15906#0" />
+            <element signature="e#15494#15874#0" />
+            <element signature="e#15577#15795#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
