@@ -77,9 +77,6 @@ TranSuite is ready to use. The compressed file can be directly downloaded from t
 Additionally, in the future it will also be possible to install TranSuite through popular Python installation managers PyPI and Anaconda:
 
 
-```
-
-
 ----------------------------
 # Modules
 ----------------------------
