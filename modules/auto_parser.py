@@ -11,6 +11,7 @@ import traceback
 from argparse import ArgumentParser, RawTextHelpFormatter
 from modules.auto_main import run_transuite
 from lib.logger.logger import logger, clean_log
+from lib.tools.input_tools import check_input
 
 
 description = \
@@ -36,7 +37,6 @@ parser.add_argument('--outname',
                     dest="outname", default=None,
                     help="Prefix for the output files.")
 
-
 parser.add_argument("--cds",
                     dest="cds_th", type=int, default=30,
                     help="Minimum number of amino-acids an ORF must have to be considered as a potential CDS. "
@@ -57,46 +57,21 @@ parser.add_argument("--ptc",
                     help="Minimum CDS length percentage below which a transcript is considered "
                          "prematurely terminated (PTC). Default: 70%%.")
 
+parser.add_argument('--chimeric',
+                    dest="chimeric", default=None,
+                    help="Table indicating chimeric genes in the annotation.")
 
 def main():
 
     args = parser.parse_args()
 
-    # Check input arguments
-    for arg_val, arg_name in zip([args.gtf, args.fasta, args.outpath, args.outname],
-                                 ["--gtf", "--fasta", "--outpath", "--outname"]):
-        if arg_val is None:
-            sys.exit(f'ERROR: No information specified for argument "{arg_name}"')
+    # Check and sanitize user input
+    args = check_input(args)
 
     # Create logfile to track the analysis, overwrite it if it exist ("w+" mode)
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
     logfile = os.path.join(args.outpath, f"{time_stamp}_{args.outname}_logfile_temp.out")
     logger(logfile, w_mode="w+")
-
-    # Normalize paths
-    args.gtf = os.path.abspath(os.path.normpath(args.gtf))
-    args.fasta = os.path.abspath(os.path.normpath(args.fasta))
-    args.outpath = os.path.abspath(os.path.normpath(args.outpath))
-
-    for fl, arg_name in zip([args.gtf, args.fasta], ["--gtf", "--fasta"]):
-        if not os.path.exists(fl):
-            sys.exit(f'ERROR: File "{fl}" specified for "{arg_name}" does not exist')
-
-    if not 0 <= args.ptc_th <= 100:
-        sys.exit(f'The % value specified for "--ptc" must be a number between 0 and 100')
-
-    if args.cds_th < 0:
-        sys.exit(f'The minimum length of the CDS ("--cds") must be positive')
-
-    if args.pep_th < 0:
-        sys.exit(f'The minimum length of the peptide ("--pep") must be positive')
-
-    if args.iter_th < 0:
-        sys.exit(f'The number of TransFix iterations ("--iter") must be positive')
-
-    # Create output folder if it doesn't exist
-    if not os.path.isdir(args.outpath):
-        os.makedirs(args.outpath)
 
     # Record executed command
     command = " ".join(sys.argv)
@@ -105,7 +80,7 @@ def main():
     # Run analysis
     try:
         run_transuite(args.gtf, args.fasta, args.outpath, args.outname,
-                      args.iter_th, args.cds_th, args.pep_th, args.ptc_th)
+                      args.iter_th, args.cds_th, args.pep_th, args.ptc_th, chimeric=args.chimeric)
     except SystemExit as err:
         # Valid for python 3.5+
         print("".join(traceback.TracebackException.from_exception(err).format()))

@@ -4,7 +4,6 @@ Created on Wed May 15 14:25:00 2019
 @email: e.entizne[at]dundee.ac.uk
 """
 import os
-import json
 import time
 import warnings
 
@@ -14,7 +13,7 @@ from lib.transfeat.identify_non_coding_features import *
 
 from lib.parsing.gtf_object_tools import create_gtf_object
 from lib.parsing.fasta_parsing_tools import get_fasta_sequences, write_fasta_file
-from lib.report.transfeat_report import generate_transfeat_report
+from lib.report.transfeat_report import generate_transfeat_summary
 
 warnings.filterwarnings("ignore")
 
@@ -44,13 +43,8 @@ def transfeat_main(gtf, fasta, outpath, outname, pep_len=50, ptc_len=70, uorf_le
     # Upload transcripts sequences from fasta file
     trans_seq_dt = get_fasta_sequences(fasta)
 
-    # Translate transcripts
+    # Generate transcripts sequence information
     fasta_header_dt, cds_seq_dt, pep_seq_dt = translate_transcript_cds(trans_seq_dt, gtf_obj)
-
-    # Write output fasta files
-    fasta_outfile = os.path.join(outfolder, outname)
-    write_fasta_file(cds_seq_dt, f'{fasta_outfile}_nuc.fasta', fasta_header_dt)
-    write_fasta_file(pep_seq_dt, f'{fasta_outfile}_pep.fasta', fasta_header_dt)
 
     print(time.asctime(), "Retrieving ORF information")
     if orf_index:
@@ -77,11 +71,11 @@ def transfeat_main(gtf, fasta, outpath, outname, pep_len=50, ptc_len=70, uorf_le
 
     print(time.asctime(), "Retrieving alternative ORFs information")
 
-    # Identigy transcripts with long downstream ORF
-    is_longer_dorf_dt, ldorf_coord_dt = identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt)
+    # Identify transcripts with long downstream ORF
+    is_longer_dorf_dt, ldorf_data_dt = identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt)
 
     # Identify transcripts with upstream ORF
-    trans_orf_seq_dt, urof_categories = identify_uorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt, uorf_len)
+    is_uorf_dt, uorf_data_dt, urof_categories = identify_uorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt, uorf_len)
 
     print(time.asctime(), "Identifying Non-Coding features")
 
@@ -109,20 +103,12 @@ def transfeat_main(gtf, fasta, outpath, outname, pep_len=50, ptc_len=70, uorf_le
 
     nmd_features_dt = generate_nmd_features_lines(gtf_obj, is_nmd_dt, is_ptc_dt, is_dssj_dt, is_long_3utr_dt, urof_categories)
 
-    print(time.asctime(), "Classifying transcripts into Coding or Non-coding according to the identified features")
-    # Group non-coding transcripts
-    noncoding_transcripts = set()
-    for noncoding_dt in [is_orf_absent_dt, is_orf_short_dt, is_ptc_dt, is_nmd_dt]:
-        for trans_id, trans_flag in noncoding_dt.items():
-            if trans_flag is True:
-                noncoding_transcripts.add(trans_id)
-
     # Identify AS in UTR and NAGNAG features
     as_in_utr_dt, as_utr_location_dt, nagnag_dt = identify_similar_coding_features(gtf_obj)
 
     # Some transcripts are missing from the features_dict either because:
-    # a) Not present in the FASTA file, b) it doesn't have a CDS, or c) it's the only transcript in the overlap group
-    # To avoid KeyError further downstream (in generate_feature_tag()) these dictionaries return None by default
+    # (1) Not present in the FASTA file, (2) it doesn't have a CDS, or (3) it's the only transcript in the overlap group
+    # To avoid KeyError further downstream in 'generate_feature_tag'. These dictionaries return None by default
 
     # Dictionary of features to annotate
     feature_dicts = {}
@@ -144,34 +130,42 @@ def transfeat_main(gtf, fasta, outpath, outname, pep_len=50, ptc_len=70, uorf_le
     coding_potentiality_dt, coding_features_dt, alternative_ORF_dt = generate_feature_tag(gtf_obj, feature_dicts)
 
     # These dictionaries are required to write the TransFeat table
-    features_info_dicts = {}
-    features_info_dicts["Coding_potentiality"] = coding_potentiality_dt
-    features_info_dicts["Coding_features"] = coding_features_dt
-    features_info_dicts["NMD_features"] = nmd_features_dt
-    features_info_dicts["Alternative_ORF"] = alternative_ORF_dt
-    features_info_dicts["ldORF_coord"] = ldorf_coord_dt
+    table_info_dicts = {}
+    table_info_dicts["Coding_potentiality"] = coding_potentiality_dt
+    table_info_dicts["Coding_features"] = coding_features_dt
+    table_info_dicts["NMD_features"] = nmd_features_dt
+    table_info_dicts["Alternative_ORF"] = alternative_ORF_dt
+
+    # Get alternative ORFs IDs to validate classification on table
+    ldorf_trans = set([t_id for t_id in is_longer_dorf_dt if is_longer_dorf_dt[t_id] is True])
+    uorf_trans = set([t_id for t_id in is_uorf_dt if is_uorf_dt[t_id] is True])
+
+    # Write TransFeat table output
+    transfeat_table = write_transfeat_table(gtf_obj, table_info_dicts, pep_seq_dt, outfolder, outname,
+                                            ldorf_ids=ldorf_trans, uorf_ids=uorf_trans, pep_len=pep_len)
+
+    # Write GENERAL/TOTAL output fasta files
+    fasta_outfile = os.path.join(outfolder, outname)
+    write_fasta_file(cds_seq_dt, f'{fasta_outfile}_nuc.fasta', fasta_header_dt)
+    write_fasta_file(pep_seq_dt, f'{fasta_outfile}_pep.fasta', fasta_header_dt)
 
     # These dictionaries are required to write the fasta files
     sequences_dicts = {}
+    sequences_dicts["Headers"] = fasta_header_dt
     sequences_dicts["Exonic_seq"] = trans_seq_dt
     sequences_dicts["CDS_seq"] = cds_seq_dt
     sequences_dicts["Peptide_seq"] = pep_seq_dt
-    sequences_dicts["ORF_seq"] = trans_orf_seq_dt
-    sequences_dicts["Headers"] = fasta_header_dt
+    sequences_dicts["ldORF_data"] = ldorf_data_dt
+    sequences_dicts["uORF_data"] = uorf_data_dt
 
-    # Write the output fasta files
-    # TODO return also all the other FASTA files paths
-    uORF_fa, ldORF_fa = write_transfeat_fasta_files(gtf_obj, sequences_dicts, features_info_dicts, outfolder, outname)
+    # Write ADDITIONAL output fasta files
+    write_subcategories_fasta(gtf_obj, transfeat_table, sequences_dicts, outfolder, outname)
 
-    ldorf_fa_ids = extract_fasta_ids(ldORF_fa, sep="_ldORF")
-    uorf_fa_ids = extract_fasta_ids(ldORF_fa, sep="_uORF")
+    # Generate tables summarizing the main transfeat data
+    generate_transfeat_summary(gtf, transfeat_table)
 
-    # Write TransFeat table output
-    transfeat_table = write_transfeat_table(gtf_obj, features_info_dicts, pep_seq_dt, outfolder, outname,
-                                            ldorf_ids=ldorf_fa_ids, uorf_ids=uorf_fa_ids, pep_len=pep_len)
-
-    # Finally, generate report with brief description of the table
-    generate_transfeat_report(gtf, transfeat_table)
+    # Generate table with additional NMD information
+    write_NMD_table(gtf_obj, feature_dicts, sequences_dicts, outfolder, outname)
 
     # Return output file for TransAll function
     return transfeat_table

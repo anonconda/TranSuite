@@ -12,6 +12,7 @@ from lib.logger.logger import logger, clean_log
 from argparse import ArgumentParser, RawTextHelpFormatter
 from modules.transfix_main import transfix_main
 from lib.parsing.gtf_parsing_tools import add_features_to_gtf
+from lib.tools.input_tools import check_input
 
 
 description = \
@@ -36,37 +37,26 @@ parser.add_argument("--iter",
 
 parser.add_argument('--outpath',
                     dest="outpath",
-                    help="(Absolute path of the output folder.")
+                    help="Path of the output folder.")
 
 parser.add_argument('--outname',
                     dest="outname",
-                    help="Name of the output file (without file extension).")
+                    help="Prefix for the output files.")
 
+parser.add_argument('--chimeric',
+                    dest="chimeric", default=None,
+                    help="Table indicating chimeric genes in the annotation.")
 
 def main():
     args = parser.parse_args()
+
+    # Check and sanitize user input
+    args = check_input(args)
 
     # Create logfile to track the analysis, overwrite it if it exist ("w+" mode)
     time_stamp = time.strftime("%Y%m%d-%H%M%S")
     logfile = os.path.join(args.outpath, f"{time_stamp}_{args.outname}_logfile_temp.out")
     logger(logfile, w_mode="w+")
-
-    # Check input arguments
-    for arg_val, arg_name in zip([args.gtf, args.fasta, args.outpath, args.outname],
-                                 ["--gtf", "--fasta", "--outpath", "--outname"]):
-        if not arg_val:
-            sys.exit(f'Error: No value specified for argument "{arg_name}"')
-
-    for fl, arg_name in zip([args.gtf, args.fasta], ["--gtf", "--fasta"]):
-        if not os.path.exists(fl):
-            sys.exit(f'Error: File "{fl}" specified for "{arg_name}" does not exist.')
-
-    if args.iter_th < 0:
-        sys.exit(f'The number of TransFix iterations ("--iter") must be positive')
-
-    # Create output folder if it doesn't exist
-    if not os.path.isdir(args.outpath):
-        os.makedirs(args.outpath)
 
     # Record executed command
     command = " ".join(sys.argv)
@@ -74,7 +64,8 @@ def main():
 
     # Run analysis
     try:
-        transfix_gtf = transfix_main(args.gtf, args.fasta, args.outpath, args.outname, chimeric=None, iter_th=args.iter_th)
+        transfix_gtf = transfix_main(args.gtf, args.fasta, args.outpath, args.outname,
+                                     iter_th=args.iter_th, chimeric=args.chimeric)
 
         # Annotate additional features (UTR, start/stop codons)
         _ = add_features_to_gtf(transfix_gtf)

@@ -72,20 +72,11 @@ Packages installations commands:
 conda install -c anaconda biopython
 ```
 
-
-
 TranSuite is ready to use. The compressed file can be directly downloaded from the [GitHub repository](https://github.com/anonconda). Once uncompressed, TranSuite can be used directly from the command line by specifying the path to the main executable `transuite.py`
 
 Additionally, in the future it will also be possible to install TranSuite through popular Python installation managers PyPI and Anaconda:
 
-PyPi installation command (TODO):
-```
-pip install transuite==0.2 
-```
 
-Anaconda installation command (TODO):
-```
-conda install -c bioconda transuite
 ```
 
 
@@ -169,19 +160,13 @@ python transuite.py FindLORF --gtf ./test_dataset/subset_AtRTD2.gtf --fasta ./te
 
 ## Output files
 FindLORF automatically generates a subfolder to store the output files:
-/**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/
+/**&lt;outpath&gt;**/**&lt;outname&gt;**\_longorf/
 
 FindLORF generates the following output files:
 1. *GTF* file with the longest ORF in the transcripts annotated as its CDS
 2. *FASTA* files of the transcripts CDS regions (nucleotide, and peptide)
 3. Log *CSV* files reporting transcripts that could not be annotated, for example: due to lack of an AUG
 4. A *JSON* file containing the transcripts ORF relative coordinates
-
-The name of the output files is generated as follows:
-1.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/**&lt;outname&gt;**\_transfind.gtf
-2.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/**&lt;outname&gt;**\_transfind_[nuc/pep].fa
-3.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/**&lt;outname&gt;**\_transfind_[logfile-name].csv
-4.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/**&lt;GTF-name&gt;**\__ORF_index.json
 
 
 -------------------
@@ -206,10 +191,11 @@ List of options available:
 - **--outpath**: Path of the output folder
 - **--outname**: Prefix for the output files
 - **--iter**: Maximum number of 'start-fixing & translation' cycles to identify alternative start sites. Default: 5
+- **--chimeric**: Table indicating chimeric genes in the annotation (Optional) 
 
 Example:
 ```
-python transuite.py TransFix --gtf ./test_dataset/test_output/test_run_transfind/test_run_transfind.gtf --fasta ./test_dataset/subset_AtRTD2_transcripts.fa --outpath ./test_dataset/test_output --outname test_run --iter 5
+python transuite.py TransFix --gtf ./test_dataset/test_output/test_run_longorf/test_run_longorf.gtf --fasta ./test_dataset/subset_AtRTD2_transcripts.fa --outpath ./test_dataset/test_output --outname test_run --iter 5
 ```
 
 ## Output files
@@ -220,11 +206,6 @@ TransFix generates the following output files:
 1. *GTF* file with the fixed CDS coordinates at the gene-level
 2. *FASTA* files of the transcripts CDS regions (nucleotide, and peptide)
 3. Multiple log *CSV* files: a) log files reporting transcripts that could not be annotated, for example for lack of an annotated CDS; and b) logfile tracking the *fixing* cycle at which the AUG was annotated
-
-The name of the output files is generated as follows:
-1.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfix/**&lt;outname&gt;**\_transfix.gtf
-2.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfix/**&lt;outname&gt;**\_transfix[nuc/pep].fa
-3.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfix/**&lt;outname&gt;**\_transfix[logfile-name].csv
 
 
 -------------------
@@ -259,23 +240,14 @@ python transuite.py TransFeat --gtf ./test_dataset/test_output/test_run_transfix
 
 ### **Output files** ###
 TransFeat automatically generates a subfolder to store the output files:
-/**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/
+/**&lt;outpath&gt;**/**&lt;outname&gt;**\_longorf/
 
 TransFeat generates the following output files:
 1. A main *CSV* table reporting the transcripts coding features
-2. *FASTA* files of: 1) the transcripts CDS (nucleotide, and peptide), 2) of transcripts subdivided by coding-potentiality (Coding transcripts, Non-coding genes), 3) and transcripts alternative ORFs (uORF, ldORF) 
-3. Multiple *CSV* tables reporting the number of transcripts and transcripts-features subdivided by gene categories
+2. *FASTA* files of: (**1**) transcripts with CDS (both protein-coding and unproductive), (**2**) transcripts classified by coding-potentiality (protein-coding transcripts, non-coding genes), (**3**) transcripts alternative ORFs (uORF, ldORF) 
+3. Multiple *CSV* tables reporting number of transcripts and transcripts-features subdivided by gene categories
 4. Multiple *CSV* tables reporting co-ordinates and sequences of transcripts subdivided by feature categories (ldORF, NMD)
 5. A *JSON* file containing the transcripts ORF relative coordinates
-
-The name of the output files is generated as follows:
-1.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat.csv
-2.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat[nuc/pep].fa
-2.2 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat_[coding_transcripts/noncoding_genes]_[nuc/pep].fa
-2.3 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat_[uORF/ldORF]_[nuc/pep].fa
-3.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat_numbers_[category-name].csv
-4.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat_[ldORF/NMD_features].csv
-5.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;GTF-name&gt;**\__ORF_index.json
 
 
 -------------------
@@ -302,6 +274,7 @@ List of options available:
 - **--iter**: Maximum number of 'start-fixing & translation' cycles to identify alternative start sites. Default: 5
 - **--pep**: Minimum number of amino-acids a translation must have to be consider a peptide. Default: 100 AA
 - **--ptc**: Minimum CDS length percentage below which a transcript is considered prematurely terminated (PTC). Default: 70%
+- **--chimeric**: Table indicating chimeric genes in the annotation (Optional)
 
 Example:
 ```
@@ -310,7 +283,7 @@ python transuite.py Auto --gtf ./test_dataset/subset_AtRTD2.gtf --fasta ./test_d
 
 ### **Output files** ###
 The Auto module automatically generates all of the modules subfolders and their respective output files:
-/**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/
+/**&lt;outpath&gt;**/**&lt;outname&gt;**\_longorf/
 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfix/
 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/
 
@@ -320,12 +293,6 @@ The main output files of TranSuite pipeline are:
 3. The *FASTA* files generate by TransFix and/or as classified by TransFeat (Coding transcripts, Non-coding genes)
 4. Any of the multiple log files generated during the analysis
 
-The name of the output files is generated as follows:
-1.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfix/**&lt;outname&gt;**\_transfix.gtf
-2.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat.csv
-3.1 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfind/**&lt;outname&gt;**\_transfix_[nuc/pep].fa
-3.2 /**&lt;outpath&gt;**/**&lt;outname&gt;**\_transfeat/**&lt;outname&gt;**\_transfeat_[coding_transcripts/noncoding_genes]\_[nuc/pep].fa
-
 
 ----------------------------
 # Future work
@@ -333,13 +300,12 @@ The name of the output files is generated as follows:
 
 TODO:
 - Create PyPI / Anaconda installer
-- Change FindLORF old *"_transfind"* prefix to *"_longorf"*
 - Allow user to modify the minimum length to identify uORF, and Long 3'UTR (Current values: 10 AA and 350 nt respectively)
 - Allow user to modify the minimum "nucleotide distance from last Splice-Junction" for the identification of the DSSJ NMD-signal (default 50 nt)
-- Allow the user to specify the IDs of chimeric genes to allow for *"chimeric-aware AUG fixing"* during TransFix analysis (Main code completed, it just needs the command line argument)
 - Tidy up and make available *in-house* scripts to identify overlapping gene IDs in the annotation (This script could be useful to generate tables of potentially chimeric gene IDs)
 - Add a more detailed description of TransFeat output table into the README
 - Create a Web-Tool interface for TranSuite in [Galaxy](https://usegalaxy.org/)
+- Allow the use of alternate codon tables
 
 
 ----------------------------

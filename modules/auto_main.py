@@ -19,7 +19,7 @@ def file_exist(outfile, skip_message=True):
         return False
 
 
-def run_transuite(gtf, fasta, outpath, outname, iter_th=5, cds_th=30, pep_th=50, ptc_th=70):
+def run_transuite(gtf, fasta, outpath, outname, iter_th=5, cds_th=30, pep_th=50, ptc_th=70, chimeric=None):
 
     # 1) Remove CDS information from input annotation file
     filtered_gtf = os.path.splitext(gtf)[0] + '_exons.gtf'
@@ -27,7 +27,7 @@ def run_transuite(gtf, fasta, outpath, outname, iter_th=5, cds_th=30, pep_th=50,
         filtered_gtf = filter_gtf_file(gtf)
 
     # 2) Run FindLORF
-    tfind_name = outname.replace(".gtf", "") + "_transfind"
+    tfind_name = outname.replace(".gtf", "") + "_longorf"
     tfind_folder = os.path.join(outpath, tfind_name)
     transfind_gtf = os.path.join(tfind_folder, f"{tfind_name}.gtf")
 
@@ -44,7 +44,7 @@ def run_transuite(gtf, fasta, outpath, outname, iter_th=5, cds_th=30, pep_th=50,
     transfix_gtf = os.path.join(tfix_folder, f"{tfix_name}.gtf")
 
     if not file_exist(transfix_gtf):
-        transfix_gtf = transfix_main(transfind_gtf, fasta, outpath, outname, chimeric=None, iter_th=iter_th)
+        transfix_gtf = transfix_main(transfind_gtf, fasta, outpath, outname, iter_th=iter_th, chimeric=chimeric)
 
         # 3.5) Add extra features to the annotation
         transfix_gtf = add_features_to_gtf(transfix_gtf)

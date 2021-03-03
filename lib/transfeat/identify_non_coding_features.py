@@ -3,6 +3,7 @@ import time
 from collections import defaultdict
 from lib.parsing.gtf_object_tools import find_utr_regions
 from lib.transfeat.transfeat_tools import get_orf_seq
+from lib.findlorf.findlorf_tools import convert_to_genomic_coord, create_coordinate_lookup_table
 
 
 def identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt):
@@ -11,7 +12,7 @@ def identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt):
 
     # Useful methods to calculate lengths, "get_orf_len" length include introns, "get_cds_len" is length after splicing
     get_cds_len = lambda cds_list: sum([max(cds_pair)-min(cds_pair)+1 for cds_pair in cds_list])
-    get_orf_len = lambda orf: orf[1]-orf[0] # + 1 cause the miss-identification of equally longer ORF, thus is disabled
+    get_orf_len = lambda orf: orf[1]-orf[0]  # + 1 cause the miss-identification of equally longer ORF, thus is disabled
 
     # Report if there is a downstream ORF which is longer that the current CDS
     ldorf_coord_dt = {}
@@ -49,10 +50,8 @@ def identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt):
 
     ldorf_coord_dt = accepted_ldorf_coord_dt
 
-    # is_longer_dorf_dt = {}
     is_longer_dorf_dt = defaultdict(lambda: None)
     for trans in gtf_obj.trans_exons_dt.keys():
-
         if trans in longer_dorfs:
             longer_dorf_flag = True
         else:
@@ -60,7 +59,58 @@ def identify_longer_dorf(gtf_obj, relative_start_dt, orf_dt, trans_seq_dt):
 
         is_longer_dorf_dt[trans] = longer_dorf_flag
 
-    return is_longer_dorf_dt, ldorf_coord_dt
+    # Structure: ldorf_seq_data = (ldorf, ldorf_pep_seq, ldorf_nuc_seq) || ldorf_data_dt[trans].append(uorf_seq_data)
+    ldorf_data_dt = defaultdict(list)
+
+    # Validate ldORF and correct its co-ordinates
+    exon_lookup_table = create_coordinate_lookup_table(gtf_obj)
+
+    for j, (trans_id, ldORFs_coords) in enumerate(sorted(ldorf_coord_dt.items()), 1):
+
+        trans_lookup_table = exon_lookup_table[trans_id]
+        trans_strand = gtf_obj.trans_sense_dt[trans_id]
+        trans_chrom = gtf_obj.trans_chrom_dt[trans_id][:-1]
+
+        try:
+            ldorf_pep_seq, ldorf_nuc_seq = get_orf_seq(ldORFs_coords, trans_seq_dt[trans_id])
+        except KeyError:
+            ldorf_pep_seq, ldorf_nuc_seq = "", ""
+
+            # If a sequence is not available, correct the ORF flag
+            is_longer_dorf_dt[trans_id] = False
+
+        ldORFs_coords[0], *_ = convert_to_genomic_coord(ldORFs_coords[0], trans_lookup_table, trans_strand, trans_id)
+        ldORFs_coords[1], *_ = convert_to_genomic_coord(ldORFs_coords[1], trans_lookup_table, trans_strand, trans_id)
+
+        # The STOP codons are 1 nucleotide larger than what they should be
+        t_strand = gtf_obj.trans_sense_dt[trans_id]
+        if t_strand == "+":
+            # The stop codon is always the second coordinate, in this case we have to rest 1
+            ldORFs_coords[1] -= 1
+        elif t_strand == "-":
+            # The stop codon is always the second coordinate, in this case we have to add 1
+            ldORFs_coords[1] += 1
+        else:
+            pass
+
+        # The sequence already have the proper direction, so we just need to remove the last nucleotide
+        ldorf_nuc_seq = ldorf_nuc_seq[:-1]
+
+        ldorf_seq_data = (ldORFs_coords, ldorf_pep_seq, ldorf_nuc_seq)
+        ldorf_data_dt[trans_id].append(ldorf_seq_data)
+
+        # fh.write(f"{trans_id}_ldORF{j},{trans_chrom}:{ldORFs_coords[0]}-{ldORFs_coords[1]},{ldorf_pep_seq}\n")
+        #
+        # ldORF_pep_seq_dt[trans_id].append(ldorf_pep_seq)
+        # ldORF_nuc_seq_dt[trans_id].append(ldorf_nuc_seq)
+        #
+        # gene = gtf_obj.trans_gene_dt[trans_id]
+        # ldORF_coord = f'{trans_chrom}:{ldORFs_coords[0]}-{ldORFs_coords[1]}'
+        # ldORF_header = f'>{trans_id}_ldORF{j} | {gene} | {ldORF_coord}'
+        #
+        # ldORF_seq_header_dt[trans_id].append(ldORF_header)
+
+    return is_longer_dorf_dt, ldorf_data_dt
 
 
 def identify_uorf(gtf_obj, relative_start_dt, orf_dt, fasta_nuc_dt, uorf_len_th):
@@ -78,7 +128,9 @@ def identify_uorf(gtf_obj, relative_start_dt, orf_dt, fasta_nuc_dt, uorf_len_th)
     non_overlapping_uorfs_id, overlapping_uorfs_id = (set() for _ in range(2))
     inframe_uorfs_id, non_inframe_urofs_id = (set() for _ in range(2))
 
-    trans_orf_seq_dt = defaultdict(list)
+    uorfs_transcripts = set()
+
+    uorf_data_dt = defaultdict(list)
     for trans in gtf_obj.trans_cds_dt.keys():
         try:
             trans_orf_start = relative_start_dt[trans]
@@ -109,34 +161,34 @@ def identify_uorf(gtf_obj, relative_start_dt, orf_dt, fasta_nuc_dt, uorf_len_th)
                 continue
 
             # Identify if uORFs overlaps authentic ATG or not
-            for uorf in selected_uorfs:
-                if uorf[0] <= trans_orf_start <= uorf[1]:
-                    overlapping_uorf_coord.append(uorf)
+            for uorf_coord in selected_uorfs:
+                if uorf_coord[0] <= trans_orf_start <= uorf_coord[1]:
+                    overlapping_uorf_coord.append(uorf_coord)
                 else:
-                    non_overlapping_uorf_coord.append(uorf)
+                    non_overlapping_uorf_coord.append(uorf_coord)
 
             # Check if the start-codon of the uORFs is in frame with the authentic start-codon
-            for uorf in selected_uorfs:
+            for uorf_coord in selected_uorfs:
                 # Note: ORFs in index file have always the position: (start ORF, stop ORF)
-                uorf_start = uorf[0]
+                uorf_start = uorf_coord[0]
                 if is_in_frame(uorf_start, trans_orf_start):
-                    inframe_uorf_coord.append(uorf)
+                    inframe_uorf_coord.append(uorf_coord)
                 else:
-                    non_inframe_uorf_coord.append(uorf)
+                    non_inframe_uorf_coord.append(uorf_coord)
 
         if not selected_uorfs:
             continue
 
-        for uorf in selected_uorfs:
+        for uorf_coord in selected_uorfs:
             try:
                 trans_nucl_seq = fasta_nuc_dt[trans]
-                uorf_pep_seq, uorf_nuc_seq = get_orf_seq(uorf, trans_nucl_seq)
+                uorf_pep_seq, uorf_nuc_seq = get_orf_seq(uorf_coord, trans_nucl_seq)
 
             except KeyError:
                 uorf_pep_seq, uorf_nuc_seq = "", ""
 
-            uorf_seq_data = (uorf, uorf_pep_seq, uorf_nuc_seq)
-            trans_orf_seq_dt[trans].append(uorf_seq_data)
+            uorf_seq_data = (uorf_coord, uorf_pep_seq, uorf_nuc_seq)
+            uorf_data_dt[trans].append(uorf_seq_data)
 
         if overlapping_uorf_coord:
             overlapping_uorfs_id.add(trans)
@@ -150,16 +202,65 @@ def identify_uorf(gtf_obj, relative_start_dt, orf_dt, fasta_nuc_dt, uorf_len_th)
         if non_inframe_uorf_coord:
             non_inframe_urofs_id.add(trans)
 
-    # uorf_sets = [overlapping_uorfs_id, non_overlapping_uorfs_id, inframe_uorfs_id, non_inframe_urofs_id]
+        uorfs_transcripts.add(trans)
 
+    is_uorf_dt = {}
+    for trans in gtf_obj.trans_exons_dt.keys():
+        if trans in uorfs_transcripts:
+            is_uorf_dt[trans] = True
+        else:
+            is_uorf_dt[trans] = False
+
+    exon_lookup_table = create_coordinate_lookup_table(gtf_obj)
+
+    updated_uorf_data_dt = defaultdict(list)
+    for trans_id, trans_uorf_flag in sorted(is_uorf_dt.items()):
+
+        # Report uORFs only for transcripts with NMD signals
+        if trans_uorf_flag is False:
+            continue
+
+        trans_lookup_table = exon_lookup_table[trans_id]
+        trans_strand = gtf_obj.trans_sense_dt[trans_id]
+        trans_chrom = gtf_obj.trans_chrom_dt[trans_id][:-1]
+
+        try:
+            uORF_data_list = uorf_data_dt[trans_id]
+        except KeyError:
+            uORF_data_list = []
+
+        if uORF_data_list:
+            for i, (uORF, uORF_pep_seq, uORF_nuc_seq) in enumerate(uORF_data_list, 1):
+
+                uORF[0], *_ = convert_to_genomic_coord(uORF[0], trans_lookup_table, trans_strand, trans_id)
+                uORF[1], *_ = convert_to_genomic_coord(uORF[1], trans_lookup_table, trans_strand, trans_id)
+
+                t_strand = gtf_obj.trans_sense_dt[trans_id]
+                # The stop codon is always the second coordinate, add or rest 1 to fix shift accordind to strand
+                if t_strand == "+":
+                    uORF[1] -= 1
+                elif t_strand == "-":
+                    uORF[1] += 1
+                else:
+                    pass
+
+                # The nucleotide sequence for alternative ORF always must be one less
+                uORF_nuc_seq = uORF_nuc_seq[:-1]
+
+                updated_uorf_data = (uORF, uORF_pep_seq, uORF_nuc_seq)
+                updated_uorf_data_dt[trans_id].append(updated_uorf_data)
+
+    # Update the data with the corrected coordinates and sequences
+    uorf_data_dt = updated_uorf_data_dt
+
+    # TODO for future development it would be good to relate the not/in-frame tags to the uORF they refer to
     urof_categories = defaultdict(set)
-
     urof_categories["overlapping"].update(overlapping_uorfs_id)
     urof_categories["not_overlapping"].update(overlapping_uorfs_id)
     urof_categories["inframe"].update(overlapping_uorfs_id)
     urof_categories["not_inframe"].update(overlapping_uorfs_id)
 
-    return trans_orf_seq_dt, urof_categories
+    return is_uorf_dt, uorf_data_dt, urof_categories
 
 
 def is_orf_absent(gtf_obj):
@@ -380,17 +481,14 @@ def is_nmd(gtf_obj, auth_stop_dt, sj_dist_th=50, check_ir_event=True,
     # Generate missing feature information (Coordinates for: introns, 5'-3' UTR regions, start/stop codons)
     get_introns = lambda exons: [(ex1[-1]+1, ex2[0]-1) for (ex1, ex2) in zip(exons[:-1], exons[1:])]
 
-    # is_nmd_dt, is_dssj_dt = {}, {}
     is_nmd_dt, is_dssj_dt = [defaultdict(lambda: None) for _ in range(2)]
     for trans_id, trans_cds in gtf_obj.trans_cds_dt.items():
         gene_id = gtf_obj.trans_gene_dt[trans_id]
 
         # Initialization of NMD features flags to detect
         # The combination of this flags is analyzed further downstream to assign an NMD signal or not
-
         ir_flag, dssj_flag, ptc_flag = False, False, False
         long_3utr_flag, ov_uorf_flag, uorf_flag = False, False, False
-
 
         # Assume that the DS_SJ is False at the start, it will overwrite downstream if it the signal is present
         is_dssj_dt[trans_id] = False
@@ -444,7 +542,6 @@ def is_nmd(gtf_obj, auth_stop_dt, sj_dist_th=50, check_ir_event=True,
 
         # 3) Check for other possible NMD signals:
         # C) PTC+, D) uORF overlapping start-codon (ouORF), E) long 3' UTR
-
         # C) PTC signal
         if trans_id in ptc_trans:
             ptc_flag = True
@@ -461,9 +558,7 @@ def is_nmd(gtf_obj, auth_stop_dt, sj_dist_th=50, check_ir_event=True,
         if trans_id in uorf_trans:
             uorf_flag = True
 
-        # 4) Check with signals to consider to assign NMD classification
-        # {"DSSJ", "PTC", "OV_UORF" "LONG_3UTR"}
-
+        # 4) Check with signals to consider to assign NMD classification - {"DSSJ", "PTC", "OV_UORF" "LONG_3UTR"}
         flags_to_check = []
         if "DSSJ" in signals_to_check:
             flags_to_check.append(dssj_flag)

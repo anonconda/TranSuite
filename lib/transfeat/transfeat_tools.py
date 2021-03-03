@@ -6,8 +6,7 @@ from collections import defaultdict
 from Bio.Seq import Seq
 
 from lib.parsing.fasta_parsing_tools import write_fasta_file
-from lib.findlorf.findlorf_tools import convert_to_genomic_coord
-
+from lib.report.transfeat_report import get_transfeat_data, group_models_into_categories
 from lib.findlorf.findlorf_tools import convert_from_genomic_to_relative, create_coordinate_lookup_table
 
 
@@ -461,7 +460,7 @@ def write_transfeat_table(gtf_obj, features_info_dicts, pep_seq_dt, outfolder, o
     print(time.asctime(), f"Generating TransFeat table: {outfile}")
 
     # Proper way to initialize 'default empty containers' in python functions to avoid bugs; however:
-    # TODO initializing these empty sets is most likely not necessary as an "if check" is done before accessing them
+    # Initializing these sets is most likely not necessary as an "if check" is done before accessing them TODO check
     if not ldorf_ids:
         ldorf_ids = set()
 
@@ -507,7 +506,7 @@ def write_transfeat_table(gtf_obj, features_info_dicts, pep_seq_dt, outfolder, o
             coding_potential = features_info_dicts["Coding_potentiality"][trans]
             features = features_info_dicts["Coding_features"][trans]
 
-            # Report alt_ORF only for Unproductive trancripts
+            # Report alt_ORF only for Unproductive transcripts
             if coding_potential.upper() == "UNPRODUCTIVE":
                 alt_ORF = features_info_dicts["Alternative_ORF"][trans]
 
@@ -535,7 +534,6 @@ def write_transfeat_table(gtf_obj, features_info_dicts, pep_seq_dt, outfolder, o
                     coding_potential = "Coding"
                     features = "-"
 
-            # Ensure that match between FASTA files and table for alternative ORFs tags/sequences
             if ldorf_ids:
                 if "LDORF" in alt_ORF.upper() and trans not in ldorf_ids:
                     alt_ORF = alt_ORF.replace("ldORF", "").replace(";", "")
@@ -564,179 +562,110 @@ def write_transfeat_table(gtf_obj, features_info_dicts, pep_seq_dt, outfolder, o
     return outfile
 
 
-def write_transfeat_fasta_files(gtf_obj, sequences_dicts, features_info_dicts, outfolder, outname):
+def write_subcategories_fasta(gtf_obj, transfeat_table, sequences_dicts, outfolder, outname):
 
-    print(time.asctime(), "Generating Fasta files and tables with alternative ORF information")
+    print(time.asctime(), "Generating additional fasta files")
 
-    noncoding_genes_set = identify_non_coding_genes(gtf_obj, features_info_dicts["Coding_potentiality"])
-    non_coding_genes_dt, non_coding_headers = [{} for _ in range(2)]
-    for nc_gene_id in sorted(noncoding_genes_set):
-        for t_id in sorted(gtf_obj.gene_trans_dt[nc_gene_id]):
-            t_loc = get_location(t_id, gtf_obj)
-            try:
-                t_pot = features_info_dicts["Coding_potentiality"][t_id]
-            except KeyError:
+    # Get information from TransFeat table
+    trans_by_feature_dt, coding_categories_dt = get_transfeat_data(transfeat_table)
+    models_categories_dt = group_models_into_categories(gtf_obj, coding_categories_dt)
+
+    # Main categories of interest
+    noncoding_genes, noncoding_trans = models_categories_dt["NON_CODING"]
+    coding_genes, coding_trans = models_categories_dt["PROTEIN_CODING"]
+
+    # 0) Non-coding transcripts
+    noncoding_seq_dt, noncoding_header_dt = {}, {}
+    for t_id in sorted(noncoding_trans):
+        t_loc = get_location(t_id, gtf_obj)
+        try:
+            t_seq = sequences_dicts["Exonic_seq"][t_id]
+        except KeyError:
+            t_seq = "-"
+
+        noncoding_seq_dt[t_id] = t_seq
+        noncoding_header_dt[t_id] = f'>{t_id} | {t_loc}'
+
+    if noncoding_seq_dt:
+        cat_outfile = os.path.join(outfolder, f'{outname}_non_coding_nuc.fa')
+        write_fasta_file(noncoding_seq_dt, cat_outfile, noncoding_header_dt)
+
+    # 1) Protein-coding transcripts
+    coding_nuc_seq_dt, coding_pep_seq_dt, coding_header_dt = [{} for _ in range(3)]
+    for t_id in sorted(coding_trans):
+        t_loc = get_location(t_id, gtf_obj)
+        try:
+            t_nuc_seq = sequences_dicts["CDS_seq"][t_id]
+            t_pep_seq = sequences_dicts["Peptide_seq"][t_id]
+        except KeyError:
+            t_nuc_seq, t_pep_seq = "-", "-"
+
+        coding_nuc_seq_dt[t_id] = t_nuc_seq
+        coding_pep_seq_dt[t_id] = t_pep_seq
+        coding_header_dt[t_id] = f'>{t_id} | {t_loc}'
+
+    if coding_nuc_seq_dt and coding_pep_seq_dt:
+        nuc_outfile = os.path.join(outfolder, f'{outname}_coding_nuc.fa')
+        write_fasta_file(coding_nuc_seq_dt, nuc_outfile, coding_header_dt)
+
+        pep_outfile = os.path.join(outfolder, f'{outname}_coding_pep.fa')
+        write_fasta_file(coding_pep_seq_dt, pep_outfile, coding_header_dt)
+
+    # 2) Alt ORFs sequences
+    # Both of this dict has the same structure:  t_id: list([orf_coords, orf_pep_seq, orf_nuc_seq])
+    ldorf_data_dt = sequences_dicts["ldORF_data"]
+    uorf_data_dt = sequences_dicts["uORF_data"]
+
+    for altORF_dt, orf_tag in [(ldorf_data_dt, "ldORF"), (uorf_data_dt, "uORF")]:
+
+        orf_nuc_seq_dt, orf_pep_seq_dt, orf_header_dt = [{} for _ in range(3)]
+
+        for t_id in sorted(altORF_dt):
+            t_chrom = gtf_obj.trans_chrom_dt[t_id][:-1]
+
+            for i, t_orf_data in enumerate(altORF_dt[t_id], 1):
+                ORF_coord, ORF_pep_seq, ORF_nuc_seq = t_orf_data
+
+                tagged_id = f"{t_id}_{orf_tag}_{i}"
+                t_loc = f"{t_chrom}:{ORF_coord[0]}-{ORF_coord[1]}"
+
+                orf_nuc_seq_dt[tagged_id] = ORF_nuc_seq
+                orf_pep_seq_dt[tagged_id] = ORF_pep_seq
+                orf_header_dt[tagged_id] = f'>{tagged_id} | {t_loc}'
+
+        if orf_nuc_seq_dt and orf_pep_seq_dt:
+            orf_nuc_outfile = os.path.join(outfolder, f'{outname}_{orf_tag}_nuc.fa')
+            write_fasta_file(orf_nuc_seq_dt, orf_nuc_outfile, orf_header_dt)
+
+            orf_pep_outfile = os.path.join(outfolder, f'{outname}_{orf_tag}_pep.fa')
+            write_fasta_file(orf_pep_seq_dt, orf_pep_outfile, orf_header_dt)
+
+
+def write_NMD_table(gtf_obj, feature_dicts, sequences_dicts, outfolder, outname):
+
+    print(time.asctime(), "Generating table with additional NMD feature information")
+
+    nmd_outfile = os.path.join(outfolder, f"{outname}_NMD_features.csv")
+    with open(nmd_outfile, "w+") as fh:
+        # Write header
+        fh.write("Transcript_ID,NMD_features,uORF_coordinates,uORF_sequence\n")
+        for trans_id, trans_nmd_features in sorted(feature_dicts["NMD_features"].items()):
+
+            # Ignore transcripts that doesn't report any NMD feature
+            if trans_nmd_features == "-":
                 continue
-            if t_pot.upper() == "NON_CODING":
-                try:
-                    t_seq = sequences_dicts["Exonic_seq"][t_id]
-                except KeyError:
-                    t_seq = "-"
-                non_coding_genes_dt[t_id] = t_seq
-                non_coding_headers[t_id] = f'>{t_id} | {t_loc}'
 
-    if non_coding_genes_dt:
-        non_coding_fasta = os.path.join(outfolder, f'{outname}_noncoding_genes_nuc.fasta')
-        write_fasta_file(non_coding_genes_dt, non_coding_fasta, non_coding_headers)
+            trans_chrom = gtf_obj.trans_chrom_dt[trans_id][:-1]
 
-    # Write peptide of coding transcripts for the user to explore with BLAST
-    coding_trans_nuc_dt, coding_trans_pep_dt = [{} for _ in range(2)]
-    for t_id, t_pot in features_info_dicts["Coding_potentiality"].items():
-        if t_pot.upper() == "CODING":
-            coding_trans_nuc_dt[t_id] = sequences_dicts["CDS_seq"][t_id]
-            coding_trans_pep_dt[t_id] = sequences_dicts["Peptide_seq"][t_id]
+            try:
+                uORF_data_list = sequences_dicts["uORF_data"][trans_id]
+            except KeyError:
+                uORF_data_list = []
 
-    coding_fasta = os.path.join(outfolder, f"{outname}_coding_transcripts")
-    write_fasta_file(coding_trans_nuc_dt, f'{coding_fasta}_nuc.fasta', sequences_dicts["Headers"])
-    write_fasta_file(coding_trans_pep_dt, f'{coding_fasta}_pep.fasta', sequences_dicts["Headers"])
-
-    # Necessary to re-annotate the Alternative ORF coordinates
-    exon_lookup_table = create_coordinate_lookup_table(gtf_obj)
-
-    # Prefix name and path of fasta files
-    fasta_outfile = os.path.join(outfolder, outname)
-
-    if features_info_dicts["NMD_features"]:
-        uORF_seq_header_dt, uORF_pep_seq_dt, uORF_nuc_seq_dt = [defaultdict(list) for _ in range(3)]
-
-        nmd_outfile = os.path.join(outfolder, f"{outname}_NMD_features.csv")
-        with open(nmd_outfile, "w+") as fh:
-            # Write header
-            fh.write("Transcript_ID,NMD_features,uORF_coordinates,uORF_sequence\n")
-            for trans_id, trans_nmd_features in sorted(features_info_dicts["NMD_features"].items()):
-
-                # Ignore transcripts that doesn't report any NMD feature
-                if trans_nmd_features == "-":
-                    continue
-
-                trans_lookup_table = exon_lookup_table[trans_id]
-                trans_strand = gtf_obj.trans_sense_dt[trans_id]
-                trans_chrom = gtf_obj.trans_chrom_dt[trans_id][:-1]
-
-                try:
-                    uORF_data_list = sequences_dicts["ORF_seq"][trans_id]
-                except KeyError:
-                    uORF_data_list = []
-
-                if uORF_data_list:
-                    for i, (uORF, uORF_pep_seq, uORF_nuc_seq) in enumerate(uORF_data_list, 1):
-
-                        uORF[0], *_ = convert_to_genomic_coord(uORF[0], trans_lookup_table, trans_strand, trans_id)
-                        uORF[1], *_ = convert_to_genomic_coord(uORF[1], trans_lookup_table, trans_strand, trans_id)
-
-                        # TODO check fix of '1-nucleotide shift' observed in uORF coordinates
-                        t_strand = gtf_obj.trans_sense_dt[trans_id]
-                        # The stop codon is always the second coordinate, add or rest 1 to fix shift accordind to strand
-                        if t_strand == "+":
-                            uORF[1] -= 1
-                        elif t_strand == "-":
-                            uORF[1] += 1
-                        else:
-                            pass
-
-                        # The nucleotide sequence for alternative ORF always must be one less
-                        uORF_nuc_seq = uORF_nuc_seq[:-1]
-
-                        line = f"{trans_id},{trans_nmd_features},{trans_chrom}:{uORF[0]}-{uORF[1]},{uORF_pep_seq}\n"
-
-                        uORF_pep_seq_dt[trans_id].append(uORF_pep_seq)
-                        uORF_nuc_seq_dt[trans_id].append(uORF_nuc_seq)
-
-                        gene = gtf_obj.trans_gene_dt[trans_id]
-                        uORF_coord = f'{trans_chrom}:{uORF[0]}-{uORF[1]}'
-                        uORF_header = f'>{trans_id}_uORF{i} | {gene} | {uORF_coord}'
-
-                        uORF_seq_header_dt[trans_id].append(uORF_header)
-
-                        fh.write(line)
-                else:
-                    line = f"{trans_id},{trans_nmd_features},-,-\n"
+            if uORF_data_list:
+                for i, (uORF, uORF_pep_seq, uORF_nuc_seq) in enumerate(uORF_data_list, 1):
+                    line = f"{trans_id},{trans_nmd_features},{trans_chrom}:{uORF[0]}-{uORF[1]},{uORF_pep_seq}\n"
                     fh.write(line)
-
-        if uORF_pep_seq_dt:
-            write_fasta_file(uORF_pep_seq_dt, f"{fasta_outfile}_uORF_pep.fasta", uORF_seq_header_dt)
-            write_fasta_file(uORF_nuc_seq_dt, f"{fasta_outfile}_uORF_nuc.fasta", uORF_seq_header_dt)
-
-    if features_info_dicts["ldORF_coord"]:
-        ldORF_seq_header_dt, ldORF_pep_seq_dt, ldORF_nuc_seq_dt = [defaultdict(list) for _ in range(3)]
-
-        ldORFs_outfile = os.path.join(outfolder, f"{outname}_ldORFs.csv")
-        with open(ldORFs_outfile, "w+") as fh:
-            # Write header
-            fh.write("Transcript_ID,ldORF_coordinates,ldORF_sequence\n")
-            for j, (trans_id, ldORFs_coords) in enumerate(sorted(features_info_dicts["ldORF_coord"].items()), 1):
-
-                trans_lookup_table = exon_lookup_table[trans_id]
-                trans_strand = gtf_obj.trans_sense_dt[trans_id]
-                trans_chrom = gtf_obj.trans_chrom_dt[trans_id][:-1]
-
-                try:
-                    ldorf_pep_seq, ldorf_nuc_seq = get_orf_seq(ldORFs_coords, sequences_dicts["Exonic_seq"][trans_id])
-                except KeyError:
-                    ldorf_pep_seq, ldorf_nuc_seq = "", ""
-
-                ldORFs_coords[0], *_ = convert_to_genomic_coord(ldORFs_coords[0], trans_lookup_table, trans_strand, trans_id)
-                ldORFs_coords[1], *_ = convert_to_genomic_coord(ldORFs_coords[1], trans_lookup_table, trans_strand, trans_id)
-
-                # The STOP codons are 1 nucleotide larger than what they should be
-                # Since this doesn't affect the analysis (get_orf_len() take care of that) I fix this here
-
-                t_strand = gtf_obj.trans_sense_dt[trans_id]
-                if t_strand == "+":
-                    # The stop codon is always the second coordinate, in this case we have to rest 1
-                    ldORFs_coords[1] -= 1
-                elif t_strand == "-":
-                    # The stop codon is always the second coordinate, in this case we have to add 1
-                    ldORFs_coords[1] += 1
-                else:
-                    pass
-                 # The sequence already have the proper direction, so we just need to remove the last nucleotide
-                ldorf_nuc_seq = ldorf_nuc_seq[:-1]
-
-                fh.write(f"{trans_id}_ldORF{j},{trans_chrom}:{ldORFs_coords[0]}-{ldORFs_coords[1]},{ldorf_pep_seq}\n")
-
-                ldORF_pep_seq_dt[trans_id].append(ldorf_pep_seq)
-                ldORF_nuc_seq_dt[trans_id].append(ldorf_nuc_seq)
-
-                gene = gtf_obj.trans_gene_dt[trans_id]
-                ldORF_coord = f'{trans_chrom}:{ldORFs_coords[0]}-{ldORFs_coords[1]}'
-                ldORF_header = f'>{trans_id}_ldORF{j} | {gene} | {ldORF_coord}'
-
-                ldORF_seq_header_dt[trans_id].append(ldORF_header)
-
-        if ldORF_pep_seq_dt:
-            write_fasta_file(ldORF_pep_seq_dt, f"{fasta_outfile}_ldORF_pep.fasta", ldORF_seq_header_dt)
-            write_fasta_file(ldORF_nuc_seq_dt, f"{fasta_outfile}_ldORF_nuc.fasta", ldORF_seq_header_dt)
-
-    ldORF_fa = f"{fasta_outfile}_ldORF_pep.fasta"
-    uORF_fa = f"{fasta_outfile}_uORF_pep.fasta"
-
-    return uORF_fa, ldORF_fa
-
-
-def extract_fasta_ids(fasta, sep=None):
-
-    print(time.asctime(), f"Extracting IDs from fasta: {fasta}")
-
-    ids_set = set()
-    with open(fasta) as fh:
-        for row in fh:
-            if row.startswith(">"):
-                if sep:
-                    r_id = row.strip(">").split(sep)[0]
-                else:
-                    r_id = row.strip(">")
-
-                ids_set.add(r_id)
-
-    return ids_set
+            else:
+                line = f"{trans_id},{trans_nmd_features},-,-\n"
+                fh.write(line)

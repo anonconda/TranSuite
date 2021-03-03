@@ -68,10 +68,11 @@ def get_transfeat_data(transfeat_table):
 
             gene_trans_dt[gene_id].add(trans_id)
 
-    # In previous versions of TransFeat table "UNPRODUCTIVE" transcripts were tag as "NON_CODING", this accounted for that
+    # Previous versions of TransFeat table "UNPRODUCTIVE" transcripts were tag as "NON_CODING". This accounted for that
     gene_coding_pot_dt["NON_CODING"] = gene_coding_pot_dt["NON_CODING"].difference(gene_coding_pot_dt["CODING"])
 
-    # Track transcripts belonging to Protein-coding genes and Non-coding genes, Protein-coding genes will contain Non-coding isoforms
+    # Track transcripts belonging to Protein-coding genes and Non-coding genes
+    # Note: Protein-coding genes will contain Non-coding isoforms
     for coding_pot_key, gene_set in gene_coding_pot_dt.items():
         for g_id in gene_set:
             trans_by_gene_coding_pot_dt[coding_pot_key].update(gene_trans_dt[g_id])
@@ -83,7 +84,7 @@ def get_transfeat_data(transfeat_table):
     return trans_by_feature_dt, coding_categories_dt
 
 
-def group_genes_into_categories(gtf_obj, coding_categories_dt):
+def group_models_into_categories(gtf_obj, coding_categories_dt):
 
     print(time.asctime(), f"Classifying Genes and Transcripts into diverse categories")
 
@@ -112,7 +113,7 @@ def group_genes_into_categories(gtf_obj, coding_categories_dt):
     multiexonic_genes = multiso_genes | singleiso_multiexon_genes
     multiexonic_trans = multiso_trans | singleiso_multiexon_trans
 
-    # Auto group / Total
+    # Total
     all_genes = multiso_genes | singleiso_multiexon_genes | singleiso_monoexon_genes
     all_trans = multiso_trans | singleiso_multiexon_trans | singleiso_monoexon_trans
 
@@ -120,7 +121,7 @@ def group_genes_into_categories(gtf_obj, coding_categories_dt):
     coding_genes = coding_categories_dt["GENES"]["CODING"]
     coding_trans = coding_categories_dt["TRANS"]["CODING"]
     unprod_trans = coding_categories_dt["TRANS"]["UNPRODUCTIVE"]
-    coding_trans = coding_trans - unprod_trans  # Remove potential unproductive transcripts from the coding class
+    coding_trans = coding_trans - unprod_trans  # Remove unproductive transcripts from the coding transcripts category
 
     noncoding_genes = coding_categories_dt["GENES"]["NON_CODING"]
     noncoding_trans = coding_categories_dt["TRANS"]["NON_CODING"]
@@ -129,7 +130,7 @@ def group_genes_into_categories(gtf_obj, coding_categories_dt):
     notfound_genes = all_genes.difference(coding_genes | noncoding_genes)
     notfound_trans = all_trans.difference(coding_trans | unprod_trans | noncoding_trans)
 
-    # Note: KEYs names are important
+    # Note: KEY names are important. Do not change!
     gene_categories_dt = {}
     gene_categories_dt["TOTAL"] = (all_genes, all_trans)
 
@@ -313,19 +314,19 @@ def get_features_numbers(trans_group, trans_by_feature_dt):
     return coding_feats_dt, unprod_feats_dt, noncoding_feats_dt
 
 
-def get_categories_numbers(gene_categories_dt, trans_by_feature_dt):
+def get_categories_numbers(models_categories_dt, trans_by_feature_dt):
 
     categories_dt = {}
 
-    all_genes, all_trans = gene_categories_dt["TOTAL"]
+    all_genes, all_trans = models_categories_dt["TOTAL"]
     tot_genes, tot_trans = len(all_genes), len(all_trans)
 
-    notfound_genes, notfound_trans = gene_categories_dt["NOT_FOUND"]
-    noncoding_genes, noncoding_trans = gene_categories_dt["NON_CODING"]
-    coding_genes, coding_trans = gene_categories_dt["PROTEIN_CODING"]
-    _, unprod_trans = gene_categories_dt["UNPRODUCTIVE"]
+    notfound_genes, notfound_trans = models_categories_dt["NOT_FOUND"]
+    noncoding_genes, noncoding_trans = models_categories_dt["NON_CODING"]
+    coding_genes, coding_trans = models_categories_dt["PROTEIN_CODING"]
+    _, unprod_trans = models_categories_dt["UNPRODUCTIVE"]
 
-    for cat_name, (cat_genes, cat_trans) in gene_categories_dt.items():
+    for cat_name, (cat_genes, cat_trans) in models_categories_dt.items():
         # Dict to track the number in the category
         cat_dt = {}
 
@@ -394,7 +395,10 @@ def get_categories_numbers(gene_categories_dt, trans_by_feature_dt):
     return categories_dt
 
 
-def get_table_lines(cat_dt):
+def get_table_lines(cat_dt, brief=False):
+
+    # Allow brief summary description (report only major categories) to create more readable tables
+    major_cat = {"GROUP_GENES", "GROUP_TRANS", "CODING_GENES", "NONCODING_GENES", "CODING_TRANS", "NONCODING_TRANS", "UNPROD_TRANS"}
 
     lines = []
     for subcat_name, subcat_dt in cat_dt.items():
@@ -404,7 +408,12 @@ def get_table_lines(cat_dt):
             for feat_tag, (feat_n, feat_p) in sorted(subcat_dt.items(), key=lambda kv: (len(kv[0]), kv[0])):
                 # Avoid printing/writing empty values
                 if feat_n:
-                    lines.append(f"{feat_tag},{feat_n},{feat_p}")
+                    # Allow to generate more concise information for some tables
+                    if brief:
+                        if feat_tag in major_cat:
+                            lines.append(f"{feat_tag},{feat_n},{feat_p}")
+                    else:
+                        lines.append(f"{feat_tag},{feat_n},{feat_p}")
 
     return lines
 
@@ -424,9 +433,9 @@ def write_table(lines, outpath, outname):
     print(time.asctime(), f"{outfile}.csv")
 
 
-def write_transfeat_report(categories_dt, outpath, outname):
+def write_transfeat_summary_tables(categories_dt, outpath, outname, sep=True):
 
-    # This are redundant with the category TOTAL, no need to write them into a table
+    # These are redundant with the category TOTAL, no need to write them into a table
     cat_ignore = {"PROTEIN_CODING", "UNPRODUCTIVE", "NON_CODING"}
 
     # These are groups that could be present but usually aren't
@@ -434,12 +443,18 @@ def write_transfeat_report(categories_dt, outpath, outname):
 
     # These are groups that should be written into the same table
     table_groups = {"BY_CODING_POTENTIAL": ["TOTAL"],
-                    "BY_INTRON_AND_ISOFORM_CLASSIFICATION": ["SINGLEISO_MONOEXONIC", "SINGLEISO_MULTIEXONIC", "MULTIISO_MULTIEXONIC"]}
+                    "BY_STRUCTURE": ["SINGLEISO_MONOEXONIC", "SINGLEISO_MULTIEXONIC", "MULTIISO_MULTIEXONIC"]}
 
     # 1) First write the categories that should be written in the same table together and track them
     cat_processed = set()
     for group_name, cat_group in table_groups.items():
-        group_lines = []
+
+        # Make more concise table for "BY_STRUCTURE" category
+        brief_flag = False
+        if group_name == "BY_STRUCTURE":
+            brief_flag = True
+
+        group_lines = ["Category,Number,Percentage\n"]
         for cat_name in cat_group:
             try:
                 cat_dt = categories_dt[cat_name]
@@ -447,10 +462,15 @@ def write_transfeat_report(categories_dt, outpath, outname):
                 print(f"WARNING: Category {cat_name} not found")
                 continue
 
-            subgroup_lines = get_table_lines(cat_dt)
+            subgroup_lines = get_table_lines(cat_dt, brief=brief_flag)
 
-            group_lines.append(cat_name)
-            group_lines.extend(subgroup_lines)
+            if subgroup_lines:
+                # Optionally add separator (empty row) between groups
+                if sep and len(group_lines) > 1:
+                    group_lines.append("\n")
+
+                group_lines.append(cat_name)
+                group_lines.extend(subgroup_lines)
 
             # Track the processed groups to not write them again
             cat_processed.add(cat_name)
@@ -484,7 +504,7 @@ def write_transfeat_report(categories_dt, outpath, outname):
             write_table(subcat_lines, outpath, f"{outname}_numbers_{cat_name.lower()}")
 
 
-def generate_transfeat_report(gtf_file, transfeat_table):
+def generate_transfeat_summary(gtf_file, transfeat_table):
 
     # Check if files exist
     for fl in [gtf_file, transfeat_table]:
@@ -495,11 +515,11 @@ def generate_transfeat_report(gtf_file, transfeat_table):
     outpath = os.path.dirname(transfeat_table)
     outname = os.path.basename(transfeat_table).replace(".csv", "")
 
-    report_outfile = os.path.join(outpath, f"{outname}_report.txt")
-    table_subfolder = os.path.join(outpath, f"{outpath}_tables")
+    # report_outfile = os.path.join(outpath, f"{outname}_report.txt")
+    # table_subfolder = os.path.join(outpath, f"{outpath}_tables")
 
     print("\n")
-    print(time.asctime(), f'Starting analysis for TransFeat report: "{report_outfile}"', flush=True)
+    print(time.asctime(), f'Generating summary of TransFeat results ({transfeat_table})', flush=True)
 
     # 1) Get transcriptome information
     gtf_obj = create_gtf_object(gtf_file)
@@ -507,11 +527,11 @@ def generate_transfeat_report(gtf_file, transfeat_table):
     # 2) Get information from TransFeat table
     trans_by_feature_dt, coding_categories_dt = get_transfeat_data(transfeat_table)
 
-    # 3) Create a dictionary with the gene categories to analyze (Auto genes, Mono-exonic / Intron-containing genes, etc)
-    gene_categories_dt = group_genes_into_categories(gtf_obj, coding_categories_dt)
+    # 3) Create a dictionary with the gene categories to analyze (Mono-exonic / Intron-containing genes, etc)
+    models_by_categories_dt = group_models_into_categories(gtf_obj, coding_categories_dt)
 
     # 4) Get gene categories numbers
-    categories_dt = get_categories_numbers(gene_categories_dt, trans_by_feature_dt)
+    categories_dt = get_categories_numbers(models_by_categories_dt, trans_by_feature_dt)
 
     # 5) Write tables
-    write_transfeat_report(categories_dt, outpath, outname)
+    write_transfeat_summary_tables(categories_dt, outpath, outname)

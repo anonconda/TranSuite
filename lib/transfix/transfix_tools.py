@@ -24,7 +24,7 @@ def write_table(my_list, to_keep, filename, sep=","):
 
 def is_inside_an_exon(coordinate, exon_list):
 
-    # TODO I could use this method to check the generate start-stop codons in the "gtf_object_tools" file
+    # TODO check if I can use this method to check the generate start-stop codons in the "gtf_object_tools" file
 
     # Check that the CDS fall inside at least one of the exon coordinates
     is_inside_exon_list = [True if exon[0] <= coordinate <= exon[-1] else False for exon in exon_list]
@@ -474,6 +474,7 @@ def fix_chimeric_start_codon(gtf_obj, chimeric_table, trans_cds_dt, trans_sequen
 
     chimeric_genes = set()
     with open(chimeric_table) as fh:
+        next(fh)
         for row in fh:
             gene = row.strip("\n")
             chimeric_genes.add(gene)

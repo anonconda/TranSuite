@@ -21,7 +21,7 @@ from lib.parsing.fasta_parsing_tools import get_fasta_sequences, write_fasta_fil
 from lib.parsing.gtf_parsing_tools import annotate_cds_into_gtf, add_features_to_gtf
 
 
-def transfix_main(gtf_file, fasta, outpath, outname, chimeric=None, iter_th=5):
+def transfix_main(gtf_file, fasta, outpath, outname, iter_th=5, chimeric=None):
 
     print("\n")
     print(time.asctime(), "Starting TransFix analysis")
@@ -173,7 +173,6 @@ def transfix_main(gtf_file, fasta, outpath, outname, chimeric=None, iter_th=5):
     cat_dt["unprocessed_transcripts"] = trans_with_cds - removed_st
     cat_dt["unprocessed_transcripts_lines"] = [e for e in sorted(cat_dt["unprocessed_transcripts"])]
 
-    # TODO implement command line arguments to pass chimeric-IDs table
     # If a table specifying chimeric models is reported by the user, then TransFix can correct the ATG of these models
     if chimeric:
         chimeric_output_dt = fix_chimeric_start_codon(gtf_obj, chimeric, trans_cds_dt, trans_sequences_dt)
